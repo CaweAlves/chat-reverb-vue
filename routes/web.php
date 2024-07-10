@@ -9,6 +9,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard', [
+        'users' => User::whereNot('id', auth()->id())->get()
+    ]);
+})->middleware(['auth'])->name('dashboard');
+
 Route::get('/chat/{friend}', function (User $friend) {
     return view('chat', [
         'friend' => $friend
@@ -42,8 +48,4 @@ Route::post('/messages/{friend}', function (User $friend) {
     return $message;
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
